@@ -19,6 +19,6 @@ script "clone repo" do
   cwd "/vagrant"
   code <<-EOH
   /usr/bin/git svn clone svn+ssh://deploy@drf.prometheusdata.com/home/svn/weboniselab/#{node['svn']['reponame']}
-  sed -i 's/deploy/#{node['svn']['username']}/g' /home/vagrant/#{node['svn']['reponame']}/.git/config
+  /bin/sed -i 's/deploy/#{node['svn']['username']}/g' /vagrant/#{node['svn']['reponame']}/.git/config
   EOH
 end
