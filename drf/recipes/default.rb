@@ -12,13 +12,19 @@ package pkg do
 end
 end
 
-script "clone repo" do
+node['svn']['repositories'].each do |r|
+execute r do
+	command "echo #{r} >> /tmp/txt"
+end
+
+script "clone repo #{r}" do
   interpreter "bash"
   flags "-x"
   user "root"
   cwd "/vagrant"
   code <<-EOH
-  /usr/bin/git svn clone svn+ssh://deploy@drf.prometheusdata.com/home/svn/weboniselab
-  /bin/sed -i 's/deploy/#{node['svn']['username']}/g' /vagrant/weboniselab/.git/config
+  /usr/bin/git svn clone --branch trunk svn+ssh://deploy@drf.prometheusdata.com/home/svn/weboniselab/#{r}
+  /bin/sed -i 's/deploy/#{node['svn']['username']}/g' #{r}/.git/config
   EOH
+end
 end
